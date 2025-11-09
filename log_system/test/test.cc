@@ -1,0 +1,18 @@
+#include "test_helper.h"
+#include <iostream>
+#include "test_Level.h"
+
+
+
+/* TEST(NewProjectTest,base_test)
+{
+    std::cout<<"hello world, this is a new project"<<std::endl;
+} */
+
+
+int main()
+{
+    ::testing::InitGoogleTest();
+
+    return RUN_ALL_TESTS();
+}

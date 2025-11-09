@@ -39,3 +39,11 @@
 
 # debug information files
 *.dwo
+
+#folder
+.vscode
+build
+
+
+#other
+.DS_store
