@@ -182,4 +182,6 @@ TEST_F(UtilTest,config_test_default)
     ASSERT_EQ(default_config.backup_addr_,"127.0.0.1");
     ASSERT_EQ(default_config.backup_port_,8080);
     ASSERT_EQ(default_config.thread_count_,1);
+
+    fs::remove(conf_path);
 }
