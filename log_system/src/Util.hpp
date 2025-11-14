@@ -278,9 +278,6 @@ private:
 
 struct JsonData
 {
-    JsonData(const JsonData&)=delete;
-    JsonData& operator=(const JsonData&)=delete;
-
     size_t buffer_size_; //缓冲区的初始大小
     size_t threshold_; //缓冲区的倍数扩容阈值
     size_t linear_growth_; //缓冲区的线性扩容的扩容容量
