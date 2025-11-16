@@ -40,8 +40,8 @@ protected:
         //如果移动空间之后还是小，则扩容
         if(writeableBytes()<len)
         {
-            //扩容目标大小小于threshold_，选择线性扩容，否则选择成倍扩容
-            if(len<config_data_.threshold_)
+            //如果整个缓冲区大小小于threshold_，选择成倍扩容，否则选择线性扩容，避免缓冲区过度膨胀
+            if(buffer_.size()>=config_data_.threshold_)
             {
                 int times=len/config_data_.linear_growth_+1;
                 buffer_.resize(buffer_.size()+times*config_data_.linear_growth_);

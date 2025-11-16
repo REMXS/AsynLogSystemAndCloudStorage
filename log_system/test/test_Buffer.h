@@ -16,7 +16,7 @@ protected:
     static void SetUpTestSuite()
     {
         json_data.buffer_size_=10;
-        json_data.threshold_=5;
+        json_data.threshold_=20;
         json_data.linear_growth_=3;
     }
 
@@ -80,40 +80,45 @@ TEST_F(BufferTest,expansion_test)
     ASSERT_EQ(buf->writeableBytes(),2);
     ASSERT_EQ(buf->size(),10);
 
+
+    std::string data2(3,'1');
+    std::string data3(18,'3');
+    std::string data4(4,'4');
+    auto tem_conf=json_data;
     //测试线性扩容
-    std::string data1(3,'0');
-    buf->push(data1.c_str(),data1.size());
+    tem_conf.buffer_size_=20;
+    buf.reset();
+    buf=std::make_unique<Buffer>(tem_conf);
+    buf->push(data3.c_str(),data3.size());
+    buf->push(data2.c_str(),data2.size());
+    ASSERT_EQ(buf->size(),26);
     ASSERT_EQ(buf->writeableBytes(),5);
-    ASSERT_EQ(buf->size(),16);
-    ASSERT_EQ(buf->peek(),data+data1);
+    ASSERT_EQ(buf->peek(),data3+data2);
 
     buf.reset();
-    buf=std::make_unique<Buffer>(json_data);
-    data1="0000";
-    buf->push(data.c_str(),data.size());
-    buf->push(data1.c_str(),data1.size());
+    buf=std::make_unique<Buffer>(tem_conf);
+    buf->push(data3.c_str(),data3.size());
+    buf->push(data4.c_str(),data4.size());
+    ASSERT_EQ(buf->size(),26);
     ASSERT_EQ(buf->writeableBytes(),4);
-    ASSERT_EQ(buf->size(),16);
-    ASSERT_EQ(buf->peek(),data+data1);
+    ASSERT_EQ(buf->peek(),data3+data4);
 
     //测试成倍扩容
     buf.reset();
     buf=std::make_unique<Buffer>(json_data);
-    data1=std::string(6,'0');
     buf->push(data.c_str(),data.size());
-    buf->push(data1.c_str(),data1.size());
-    ASSERT_EQ(buf->writeableBytes(),6);
+    buf->push(data2.c_str(),data2.size());
     ASSERT_EQ(buf->size(),20);
-    ASSERT_EQ(buf->peek(),data+data1);
-
+    ASSERT_EQ(buf->writeableBytes(),9);
+    ASSERT_EQ(buf->peek(),data+data2);
+    
     buf.reset();
     buf=std::make_unique<Buffer>(json_data);
-    data1=std::string(16,'0');
     buf->push(data.c_str(),data.size());
-    buf->push(data1.c_str(),data1.size());
-    ASSERT_EQ(buf->writeableBytes(),16);
+    buf->push(data3.c_str(),data3.size());
     ASSERT_EQ(buf->size(),40);
-    ASSERT_EQ(buf->peek(),data+data1);
+    ASSERT_EQ(buf->writeableBytes(),14);
+    ASSERT_EQ(buf->peek(),data+data3);
 }
 
 
