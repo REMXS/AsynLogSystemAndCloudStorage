@@ -3,6 +3,7 @@
 #include "ThreadPool.hpp"
 
 #include <vector>
+#include <atomic>
 
 
 class ThreadPoolTest:public ::testing::Test
@@ -14,7 +15,7 @@ public:
         return a;
     }
 protected:
-    size_t cnt=0;
+    std::atomic_int cnt=0;
     
 };
 

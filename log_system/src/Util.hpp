@@ -53,7 +53,7 @@ std::string folderPath(const std::string&file_name)
 
     if(pos!=std::string::npos)
     {
-        return file_name.substr(0,pos+1);
+        return file_name.substr(0,pos);
     }
 
     return "";

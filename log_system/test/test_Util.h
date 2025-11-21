@@ -77,6 +77,13 @@ TEST_F(UtilTest,create_directory_test)
     ASSERT_TRUE(exists(path1_sv));
 }
 
+TEST_F(UtilTest,folder_path_test)
+{
+    using namespace asynclog::Util::File;
+    ASSERT_EQ(folderPath(""),"");
+    ASSERT_EQ(test_dir.string(),folderPath(test_file.string()));
+}
+
 TEST_F(UtilTest,get_file_size_test)
 {
     using namespace asynclog::Util::File;
