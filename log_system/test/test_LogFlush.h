@@ -1,3 +1,5 @@
+#pragma once
+
 #include "test_helper.h"
 
 #include "LogFlush.hpp"

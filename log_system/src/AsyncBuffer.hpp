@@ -69,10 +69,10 @@ public:
     {}
 
     //返回可读的字节数
-    inline size_t readableBytes(){ return write_pos_-read_pos_;}
+    inline size_t readableBytes()const { return write_pos_-read_pos_;}
 
     //返回可写的字节数
-    inline size_t writeableBytes(){ return buffer_.size()-write_pos_;}
+    inline size_t writeableBytes()const { return buffer_.size()-write_pos_;}
 
     //返回可读缓冲区的起始地址，内容只读
     inline const char* peek(){return &buffer_[read_pos_];}
@@ -87,7 +87,7 @@ public:
         return &buffer_[read_pos_];
     }
 
-    bool isEmpty(){return write_pos_==read_pos_;}
+    inline bool isEmpty()const {return write_pos_==read_pos_;}
 
     void moveReadPos(size_t len)
     {
@@ -115,6 +115,7 @@ public:
 
     void push(const char* data,size_t len)
     {
+        if(data==nullptr) return;
         ensureEnoughSpace(len);
         std::copy(data,data+len,buffer_.begin()+write_pos_);
         write_pos_+=len;
@@ -133,7 +134,7 @@ public:
         std::swap(this->write_pos_,buffer.write_pos_);
     }
 
-    inline size_t size()
+    inline size_t size() const
     {
         return buffer_.size();
     }
