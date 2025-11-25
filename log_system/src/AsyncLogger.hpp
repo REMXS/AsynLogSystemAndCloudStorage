@@ -98,6 +98,8 @@ public:
 
     }
 
+    inline std::string name()const {return logger_name_;}
+
     bool debug(const std::string&file,size_t line,const std::string&format,...)
     {
         //获取可变参数列表
