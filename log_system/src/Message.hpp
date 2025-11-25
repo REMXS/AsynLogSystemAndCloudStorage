@@ -19,9 +19,9 @@ struct LogMessage
         std::string name,std::string pay_load)
         :line_(line)
         ,ctime_(Util::Date::now())
-        ,file_name_(file)
-        ,name_(name)
-        ,pay_load_(pay_load)
+        ,file_name_(std::move(file))
+        ,name_(std::move(name))
+        ,pay_load_(std::move(pay_load))
         ,tid_(std::this_thread::get_id())
         ,level_(level)
     {}

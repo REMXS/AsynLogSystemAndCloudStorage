@@ -7,8 +7,9 @@
 // #include "test_ThreadPool.h"
 // #include "test_LogFlush.h"
 
-//#include "test_AsyncWorker.h"
-
+// #include "test_AsyncWorker.h"
+#include "test_AsyncLogger.h"
+#include "test_Integration.h"
 
 
 /* TEST(NewProjectTest,base_test)

@@ -18,15 +18,15 @@ namespace asynclog
 class RSystemOps: public ISystemOps
 {
 public:
-    FILE* fopen(const char* filename, const char* mode)override{return fopen(filename,mode);}
-    int fclose(FILE* stream)override{return fclose(stream);}
-    size_t fwrite(const void* ptr, size_t size, size_t nmemb, FILE* stream)override{return fwrite(ptr,size,nmemb,stream);}
-    int fflush(FILE* stream)override{return fflush(stream);}
-    int fileno(FILE* stream)override{return fileno(stream);}
-    int fsync(int fd)override{return fsync(fd);}
-    int ferror(FILE* stream)override{return ferror(stream);}
+    FILE* fopen(const char* filename, const char* mode)override{return ::fopen(filename,mode);}
+    int fclose(FILE* stream)override{return ::fclose(stream);}
+    size_t fwrite(const void* ptr, size_t size, size_t nmemb, FILE* stream)override{return ::fwrite(ptr,size,nmemb,stream);}
+    int fflush(FILE* stream)override{return ::fflush(stream);}
+    int fileno(FILE* stream)override{return ::fileno(stream);}
+    int fsync(int fd)override{return ::fsync(fd);}
+    int ferror(FILE* stream)override{return ::ferror(stream);}
     
-    void perror(const char* s)override{return perror(s);}
+    void perror(const char* s)override{return ::perror(s);}
 
     void createDirectory(const std::string& path) override { 
         Util::File::createDirectory(path); 

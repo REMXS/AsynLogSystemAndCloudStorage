@@ -1,3 +1,4 @@
+#pragma once
 #include "test_helper.h"
 #include "Message.hpp"
 

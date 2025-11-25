@@ -83,9 +83,8 @@ public:
     {}
     ~AsyncWorker()
     {
-
         stop();
-        if(thread_->joinable())
+        if(thread_&&thread_->joinable())
         {
             thread_->join();
         }

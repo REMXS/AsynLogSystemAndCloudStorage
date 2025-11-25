@@ -1,6 +1,8 @@
+#pragma once
 #include <cstdio>
 #include <string>
 #include <ctime>
+#include <cstdarg>
 
 class ISystemOps {
 public:
@@ -20,3 +22,12 @@ public:
     virtual time_t now() = 0; // 获取当前时间
 
 };
+
+class ISystemStrOps
+{
+public:
+    virtual ~ISystemStrOps() = default;
+
+    virtual int vasprintf(char **ret,const char *fmt,va_list ap) = 0;
+};
+
