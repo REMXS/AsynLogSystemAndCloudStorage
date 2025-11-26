@@ -133,6 +133,11 @@ int64_t fileSize(const std::string&file_name)
 //获取文件内容
 bool getFileContent(std::string&content,const std::string&file_name)
 {
+    if(file_name.back()=='/'||file_name.back()=='\\')
+    {
+        std::cerr<<"file name is a directory"<<std::endl;
+        return false;
+    }
     std::ifstream ifs(file_name,std::ios::binary|std::ios::ate);//使用ate标志直接将文件指针定位的文件的末尾
     if(!ifs.is_open())
     {

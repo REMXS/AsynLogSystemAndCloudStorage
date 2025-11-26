@@ -4,7 +4,7 @@
 
 std::shared_ptr<asynclog::AsyncLogger> DefaultLogger()
 {
-    asynclog::Manager::getInstance().getDefaultLogger();
+    return asynclog::Manager::getInstance().getDefaultLogger();
 }
 
 

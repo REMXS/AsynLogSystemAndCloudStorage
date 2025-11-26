@@ -12,7 +12,7 @@ target_include_directories(TestCloudStorage PRIVATE
 target_link_libraries(TestCloudStorage PRIVATE
     GTest::gtest
     GTest::gmock
-    asynclog
+    Server_lib
 )
 
 add_test(NAME TestCloudStorage COMMAND TestCloudStorage)

@@ -1,7 +1,25 @@
 #include <iostream>
+#include "test_helper.h"
+#include "server/test_Util.h"
+
+
+class LogInit: public ::testing::Environment
+{
+protected:
+    void SetUp() override
+    {
+        mystorage::initServerLog();
+    }
+
+    void TearDown() override
+    {
+    }
+};
 
 
 int main()
 {
-    std::cout<<"hello world"<<std::endl;
+    ::testing::InitGoogleTest();
+    ::testing::AddGlobalTestEnvironment(new LogInit());
+    return RUN_ALL_TESTS();
 }
