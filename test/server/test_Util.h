@@ -75,4 +75,122 @@ TEST_F(UtilTest, FileSize_fail_test)
     EXPECT_FALSE(file_util.getFileSize()>=0);
 }
 
+//访问文件相关的测试
+TEST_F(UtilTest,lastModifyTime_test)
+{
+    mystorage::FileUtil file_util(temp_file_path);
+    auto mod_time=file_util.lastModifyTime();
+    EXPECT_NEAR(mod_time,time(nullptr),5);
+}
 
+TEST_F(UtilTest,lastAccessTime_test)
+{
+    mystorage::FileUtil file_util(temp_file_path);
+    auto access_time=file_util.lastAccessTime();
+    EXPECT_NEAR(access_time,time(nullptr),5);
+}
+
+TEST_F(UtilTest,lastModifyTime_fail_test)
+{
+    mystorage::FileUtil file_util("non_existent_file.txt");
+    auto mod_time=file_util.lastModifyTime();
+    EXPECT_EQ(mod_time,-1);
+}
+
+TEST_F(UtilTest,lastAccessTime_fail_test)
+{
+    mystorage::FileUtil file_util("non_existent_file.txt");
+    auto access_time=file_util.lastAccessTime();
+    EXPECT_EQ(access_time,-1);
+}
+
+TEST_F(UtilTest,getPosLen_test)
+{
+    std::ifstream ifs(temp_file_path,std::ios::binary);
+    std::string buf;
+    
+    //正常读取测试
+    bool res=mystorage::FileUtil::getPosLen(ifs,buf,10,20);
+    ASSERT_TRUE(res);
+    EXPECT_EQ(buf,file_content.substr(10,20));
+
+    //边沿读取测试
+    res=mystorage::FileUtil::getPosLen(ifs,buf,10,1000);
+    ASSERT_TRUE(res);
+    EXPECT_EQ(buf,std::string(file_content.begin()+10,file_content.end()));
+    //判断触发eof
+    ASSERT_FALSE(ifs.good());
+
+    //判断触发eof后依然可以正常读取
+    res=mystorage::FileUtil::getPosLen(ifs,buf,10,20);
+    ASSERT_TRUE(res);
+    EXPECT_EQ(buf,file_content.substr(10,20));
+
+    ifs.close();
+}
+
+TEST_F(UtilTest,getPosLen_fail_test)
+{
+    using namespace::mystorage;
+    std::ifstream ifs;
+    std::string buf;
+
+    //测试异常数值
+    bool res=FileUtil::getPosLen(ifs,buf,-1,3);
+    ASSERT_FALSE(res);
+    res=FileUtil::getPosLen(ifs,buf,2,3);
+    ASSERT_FALSE(res);
+
+    //测试文件打开失败
+    res=FileUtil::getPosLen(ifs,buf,0,34);
+    ASSERT_FALSE(res);
+
+    ifs.open(temp_file_path,std::ios::binary);
+    //测试文件过量移动指针导致的失败
+    res=FileUtil::getPosLen(ifs,buf,100,2);
+    ASSERT_FALSE(res);
+}
+
+TEST_F(UtilTest,getFileContent_test)
+{
+    mystorage::FileUtil file_util(temp_file_path);
+    std::string buf;
+    bool res=file_util.getFileContent(buf);
+    ASSERT_TRUE(res);
+    EXPECT_EQ(buf,file_content);
+}
+
+TEST_F(UtilTest,getFileName_test)
+{
+    mystorage::FileUtil file_util(temp_file_path);
+    EXPECT_EQ(file_util.getFileName(), "util_test_temp_file.txt");
+}
+
+TEST_F(UtilTest,setContent_test)
+{
+    mystorage::FileUtil file_util(temp_file_path);
+    std::string new_content="New content for testing setContent method.";
+    bool res=file_util.setContent(new_content.data(),new_content.size());
+    ASSERT_TRUE(res);
+
+    //验证内容是否写入成功
+    std::string buf;
+    res=file_util.getFileContent(buf);
+    ASSERT_TRUE(res);
+    EXPECT_EQ(buf,new_content);
+}
+TEST_F(UtilTest,setContent_fail_test)
+{
+    mystorage::FileUtil fake_file_util("/protected_file.txt"); 
+    std::string new_content="Trying to write to a protected file.";
+
+    //测试打开文件失败
+    bool res=fake_file_util.setContent(new_content.data(),new_content.size());
+    ASSERT_FALSE(res);
+
+    //测试文件写入失败
+    mystorage::FileUtil file_util(temp_file_path);
+
+    bool res2=file_util.setContent(nullptr,10);
+    ASSERT_FALSE(res2);
+}

@@ -102,6 +102,7 @@ public:
         if(ec)
         {
             LogWarn(getLogger(),"%s, Get file modify time failed: %s",file_path_.c_str(),ec.message().c_str());
+            return -1;
         }
         auto sctp = std::chrono::time_point_cast<std::chrono::system_clock::duration>(ftime - fs::file_time_type::clock::now() + std::chrono::system_clock::now());
         return std::chrono::system_clock::to_time_t(sctp);
@@ -113,6 +114,7 @@ public:
         if(stat(file_path_.c_str(),&st)==-1)
         {
             LogWarn(getLogger(),"%s, Get file access time failed: %s",file_path_.c_str(),std::strerror(errno));
+            return -1;
         }
         return st.st_atime;
     }
@@ -120,7 +122,7 @@ public:
     //从文件POS处获取len长度字符给content
     static bool getPosLen(std::ifstream&ifs,std::string&buf,size_t pos,size_t len)
     {
-        if(len<=0) return false;
+        if(len<=0||pos<0) return false;
 
         if(!ifs.is_open())
         {
@@ -147,6 +149,7 @@ public:
         if(ifs.gcount()==0&&len>0)
         {
             LogWarn(getLogger(),"%s read 0 bytes",__FUNCTION__);
+            return false;
         }
 
         //如果读取的文件字节数小于buf的大小，则调整buf的大小
@@ -160,7 +163,7 @@ public:
 
 
     //获取文件名
-    std::string getFileName()
+    inline std::string getFileName()
     {
         return file_path_.filename().string();
     }
@@ -169,13 +172,19 @@ public:
     bool getFileContent(std::string&buf)
     {
         std::ifstream ifs(file_path_,std::ios::binary);
-        return getPosLen(ifs,buf,0,getFileSize());
+        bool ret=getPosLen(ifs,buf,0,getFileSize());
         ifs.close();
+        return ret;
     }
 
     //写文件
     bool setContent(const char* data,size_t len)
     {
+        if(data==nullptr||len==0)
+        {
+            LogInfo(getLogger(),"setContent: invalid argument");
+            return false;
+        }
         std::ofstream ofs(file_path_,std::ios::binary);
         if(!ofs.is_open())
         {
@@ -185,13 +194,15 @@ public:
         }
         ofs.write(data,len);
 
+        
         if(!ofs.good())
         {
             LogInfo(getLogger(),"%s write file content failed",file_path_.c_str());
             ofs.close();
             return false;
         }
-
+        ofs.close();
+        return true;
     }
     //压缩文件
 
