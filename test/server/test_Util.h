@@ -194,3 +194,70 @@ TEST_F(UtilTest,setContent_fail_test)
     bool res2=file_util.setContent(nullptr,10);
     ASSERT_FALSE(res2);
 }
+
+TEST_F(UtilTest,compress_uncompress_test)
+{
+    mystorage::FileUtil file_util(temp_file_path);
+
+    //压缩内容到文件
+    file_util.compress(file_content,3);
+    file_util.uncompress(temp_file_path);
+
+    std::string out_put_file;
+    file_util.getFileContent(out_put_file);
+
+    EXPECT_EQ(file_content,out_put_file);
+}
+
+TEST_F(UtilTest,scanDirectory_test)
+{
+    mystorage::FileUtil file_util(temp_file_path);
+    std::vector<fs::path>out_put;
+    EXPECT_FALSE(file_util.scanDirectory(out_put));
+}
+
+TEST_F(UtilTest,json_test)
+{
+    using namespace asynclog::Util;
+    std::vector<std::pair<Json::Value,std::string>>vals(5); //json对象和其对应的字符串
+    vals[0].first["name"] = "Alice";
+    vals[0].first["age"] = 30;
+    vals[0].first["isStudent"] = false;
+    vals[0].second=R"({"name":"Alice","age":30,"isStudent":false})";
+
+    vals[1].first.append("apple");
+    vals[1].first.append("banana");
+    vals[1].first.append("cherry");
+    vals[1].second=R"(["apple","banana","cherry"])";
+
+    vals[2].first["user"]["id"] = 123;
+    vals[2].first["user"]["name"] = "Bob";
+    vals[2].first["scores"].append(85);
+    vals[2].first["scores"].append(92);
+    vals[2].second=R"({"user":{"id":123,"name":"Bob"},"scores":[85,92]})";
+
+    vals[3].first=Json::Value(Json::objectValue);
+    vals[3].second=R"({})";
+
+
+    vals[4].first["key1"] = "value";
+    vals[4].first["key2"] = Json::nullValue;
+    vals[4].second=R"({"key1":"value","key2":null})";
+
+    for(auto&[json_val,str]:vals)
+    {
+        Json::Value ret_json_val;
+        //验证从字符串转化为json对象
+        JsonUtil::parse(str,ret_json_val);
+        ASSERT_EQ(ret_json_val,json_val);
+
+        //验证从json转换为字符串
+        //因为直接比较字符串很困难，所以先把json转化为字符串，然后再将字符串转化为json来验证
+        std::string ret_str;
+        Json::Value tem_json;
+        JsonUtil::serialize(json_val,ret_str);
+        JsonUtil::parse(ret_str,tem_json);
+        ASSERT_EQ(tem_json,json_val);
+    }
+}
+
