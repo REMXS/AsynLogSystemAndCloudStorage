@@ -1,6 +1,7 @@
 #include <iostream>
 #include "test_helper.h"
 #include "server/test_Util.h"
+#include "server/test_config.h"
 
 
 class LogInit: public ::testing::Environment
