@@ -2,6 +2,7 @@
 #include "test_helper.h"
 #include "server/test_Util.h"
 #include "server/test_config.h"
+#include "server/test_DataManager.h"
 
 
 class LogInit: public ::testing::Environment

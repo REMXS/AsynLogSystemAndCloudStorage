@@ -82,6 +82,7 @@ public:
     {
         //计算压缩后的可能大小
         size_t bound = ZSTD_compressBound(input.size());
+
         try {
             output.resize(bound);
         } catch (const std::bad_alloc& e) {
@@ -136,6 +137,11 @@ public:
 
         output.resize(decompress_size);
         return true;
+    }
+
+    std::string getPostfix() override
+    {
+        return ".zst";
     }
 };
 

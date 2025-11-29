@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <jsoncpp/json/json.h>
 
+
 #include "Util.hpp"
 
 
@@ -17,7 +18,7 @@ private:
     std::string download_prefix_; // URL路径前缀
     std::string deep_storage_dir_;     // 深度存储文件的存储路径
     std::string low_storage_dir_;     // 浅度存储文件的存储路径
-    std::string storage_info_;     // 已存储文件的信息
+    std::string storage_info_;     // sqlite3 数据库文件
 public:
     Config()
         :server_port_(0)
@@ -57,29 +58,54 @@ public:
         }
     }
 
-    uint16_t getServerPort()
+    uint16_t getServerPort() const 
     {
         return server_port_;
     }
-    std::string getServerIp()
+    std::string getServerIp() const
     {
         return server_ip_;
     }
-    std::string getDownloadPrefix()
+    std::string getDownloadPrefix() const
     {
         return download_prefix_;
     }
-    std::string getDeepStorageDir()
+    std::string getDeepStorageDir() const
     {
         return deep_storage_dir_;
     }
-    std::string getLowStorageDir()
+    std::string getLowStorageDir() const
     {
         return low_storage_dir_;
     }
-    std::string getStorageInfoFile()
+    std::string getStorageInfoFile() const
     {
         return storage_info_;
+    }
+
+    void setServerPort(uint16_t port)
+    {
+        server_port_=port;
+    }
+    void setServerIp(const std::string& ip)
+    {
+        server_ip_=ip;
+    }
+    void setDownloadPrefix(const std::string& prefix)
+    {
+        download_prefix_=prefix;
+    }
+    void setDeepStorageDir(const std::string& dir)
+    {
+        deep_storage_dir_=dir;
+    }
+    void setLowStorageDir(const std::string& dir)
+    {
+        low_storage_dir_=dir;
+    }
+    void setStorageInfoFile(const std::string& file)
+    {
+        storage_info_=file;
     }
 };
 
