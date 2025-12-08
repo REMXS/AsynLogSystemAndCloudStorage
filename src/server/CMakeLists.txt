@@ -8,11 +8,11 @@ pkg_check_modules(LIBEVENT REQUIRED
     libzstd
 )
 
-add_library(Server_lib INTERFACE)
+add_library(Server_lib SHARED)
 
+target_sources(Server_lib PRIVATE base64.cpp)
 
-
-target_link_libraries(Server_lib INTERFACE
+target_link_libraries(Server_lib PUBLIC
     asynclog
     ${LIBEVENT_LIBRARIES}
     ${ZSTD_LIBRARIES}
@@ -20,9 +20,10 @@ target_link_libraries(Server_lib INTERFACE
     SQLite::SQLite3
 )
 
-target_include_directories(Server_lib INTERFACE
+target_include_directories(Server_lib PRIVATE
     ${LIBEVENT_INCLUDE_DIRS}
     ${ZSTD_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
+
 

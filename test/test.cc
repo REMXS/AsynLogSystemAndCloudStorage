@@ -3,6 +3,7 @@
 #include "server/test_Util.h"
 #include "server/test_config.h"
 #include "server/test_DataManager.h"
+#include "server/test_Service.h"
 
 
 class LogInit: public ::testing::Environment

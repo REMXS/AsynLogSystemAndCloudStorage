@@ -6,7 +6,6 @@ add_executable(TestCloudStorage test.cc)
 
 target_include_directories(TestCloudStorage PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/server
-    ${CMAKE_CURRENT_SOURCE_DIR}/client
 )
 
 target_link_libraries(TestCloudStorage PRIVATE

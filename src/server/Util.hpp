@@ -325,6 +325,7 @@ public:
         if(!is_unpacked)
         {
             LogInfo(getLogger(),"Decompress error");
+            return false;
         }
         FileUtil fu(download_path);
         if(!fu.setContent(unpacked.c_str(),unpacked.size()))
