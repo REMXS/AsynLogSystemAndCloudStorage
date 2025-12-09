@@ -57,6 +57,7 @@ private:
     {
         //获取路径
         std::string path = evhttp_uri_get_path(evhttp_request_get_evhttp_uri(req));
+        path=urlDecode(path);
         //根据请求中的内容判断是什么请求
         //下载请求
         if(path.find("/download/")!=std::string::npos)
@@ -95,6 +96,7 @@ private:
         StorageInfo info;
             //获取路径
         std::string url_path=evhttp_uri_get_path(evhttp_request_get_evhttp_uri(req));
+        url_path=urlDecode(url_path);
 
         if(!data_manager_->getOneByURL(url_path,info))
         {
